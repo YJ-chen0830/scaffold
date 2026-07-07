@@ -153,8 +153,7 @@
   <div class="card">
     <h2>施工架結果</h2>
     <div id="sc-result"><p style="color:#888">尚未計算</p></div>
-    <button class="pro-btn no-print" onclick="openPro()" id="sc-pro-btn" style="display:none;">📄 產出正式計算書 PDF（NT$600）</button>
-    <div class="pro-lock-notice no-print" id="sc-lock" style="display:none;">🔒 計算完成後可產出正式計算書（NT$600/份）</div>
+    <button class="pro-btn no-print" onclick="openPro()" id="sc-pro-btn">📄 產出正式計算書 PDF</button>
     <details class="proc no-print" id="sc-proc" style="display:none;">
       <summary>📋 計算過程（供第三方檢核）</summary>
       <pre id="sc-proc-text"></pre>
@@ -170,10 +169,10 @@
 
 <div class="modal-bg" id="proModal" style="display:none;" onclick="closePro(event)">
   <div class="modal" onclick="event.stopPropagation()">
-    <div class="price-badge">NT$600 / 份</div>
+    <div class="price-badge">免費使用</div>
     <h3>📄 產出正式計算書</h3>
     <p>免費計算不限次數；確認結果無誤後，付款取得本月兌換碼，輸入即可下載可送審的 PDF 計算書。</p>
-    <a href="https://ko-fi.com/yjchen0830" target="_blank" class="ko-btn">☕ 前往 Ko-fi 付款（NT$600）</a>
+    <a href="https://ko-fi.com/yjchen0830" target="_blank" class="ko-btn">☕ 贊助支持開發</a>
     <label style="font-size:12.5px;color:#555;display:block;margin-bottom:6px;">輸入本月兌換碼：</label>
     <div class="code-row">
       <input id="code-input" type="text" placeholder="XXXX-XXXX" style="text-transform:uppercase;letter-spacing:.1em;">
