@@ -231,7 +231,7 @@ function getMonthlyCode(){
   for(var j=0;j<4;j++){code+=chars[tmp%chars.length];tmp=Math.floor(tmp/chars.length);}
   return code;
 }
-function openPro(){ JRH.checkEmail(function(){ window.print(); }); }
+function openPro(){ JRH.checkEmail(function(){ unlockPrint(); }); }
 function closePro(e){if(e.target===document.getElementById('proModal'))document.getElementById('proModal').style.display='none';}
 function verifyCode(){
   var entered=document.getElementById('code-input').value.trim().toUpperCase();
@@ -369,6 +369,22 @@ if(location.search.includes('admin=1')){
   d.textContent='本月兌換碼：'+getMonthlyCode();
   document.body.appendChild(d);
 }
+
+// ── localStorage 自動儲存/還原 ──
+(function(){
+  var pfx='jrh_sc_';
+  function save(el){localStorage.setItem(pfx+el.id,el.value);}
+  function restore(){
+    document.querySelectorAll('input[id],select[id],textarea[id]').forEach(function(el){
+      var v=localStorage.getItem(pfx+el.id);
+      if(v!==null) el.value=v;
+      el.addEventListener('input',function(){save(el);});
+      el.addEventListener('change',function(){save(el);});
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',restore);
+  else restore();
+})();
 </script>
 </body>
 </html>
