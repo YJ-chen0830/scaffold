@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
@@ -50,7 +50,10 @@
   @media(max-width:600px){.proj-grid{grid-template-columns:1fr;}}
   .pro-lock-notice{background:#fff8e6;border:1px solid var(--gold);border-radius:8px;padding:12px 16px;font-size:13px;color:#7a5c00;margin-top:10px;}
   @media print{
-    header,.no-print,details.proc{display:none!important;}
+    header,.no-print{display:none!important;}
+    details.proc{display:block!important;margin-top:16px;border:1px solid #bbb;border-radius:6px;break-inside:avoid;}
+    details.proc>summary{display:none!important;}
+    details.proc>pre{font-size:10px;line-height:1.75;white-space:pre-wrap;padding:12px 16px;color:#1a1a1a;font-family:"Courier New",monospace;}
     body{background:#fff;margin:0;font-size:12px;}
     main{padding:0;max-width:100%;}
     .grid{grid-template-columns:1fr!important;}
@@ -156,7 +159,7 @@
     <h2>施工架結果</h2>
     <div id="sc-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro()" id="sc-pro-btn">📄 產出正式計算書 PDF</button>
-    <details class="proc no-print" id="sc-proc" style="display:none;">
+    <details class="proc" id="sc-proc" style="display:none;">
       <summary>📋 計算過程（供第三方檢核）</summary>
       <pre id="sc-proc-text"></pre>
     </details>
