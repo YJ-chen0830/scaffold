@@ -64,6 +64,7 @@
   .print-header{display:none;align-items:center;justify-content:space-between;border-bottom:3px solid var(--navy);padding-bottom:12px;margin-bottom:18px;}
   .print-footer{display:none;margin-top:30px;border-top:1px solid #ccc;padding-top:10px;font-size:10px;color:#888;}
 </style>
+<script src="email-gate.js"></script>
 </head>
 <body>
 <header>
@@ -202,7 +203,7 @@ function getMonthlyCode(){
   for(var j=0;j<4;j++){code+=chars[tmp%chars.length];tmp=Math.floor(tmp/chars.length);}
   return code;
 }
-function openPro(){document.getElementById('proModal').style.display='flex';document.getElementById('code-input').value='';document.getElementById('code-msg').textContent='';}
+function openPro(){ JRH.checkEmail(function(){ window.print(); }); }
 function closePro(e){if(e.target===document.getElementById('proModal'))document.getElementById('proModal').style.display='none';}
 function verifyCode(){
   var entered=document.getElementById('code-input').value.trim().toUpperCase();
