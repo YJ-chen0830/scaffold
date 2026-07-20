@@ -233,6 +233,7 @@
   </div>
   <div class="card" data-tab="result">
     <h2>施工架結果</h2>
+    <div id="sc-diagram"></div>
     <div id="sc-result"><p style="color:#888">尚未計算</p></div>
     <button class="pro-btn no-print" onclick="openPro()" id="sc-pro-btn">📄 產出正式計算書 PDF</button>
     <details class="proc" id="sc-proc" style="display:none;">
@@ -316,6 +317,40 @@ function unlockPrint(){
   jrhPrint('施工架計算書');
 }
 
+/* 施工架立面示意圖：等比例尺畫出雙柱高度 H、寬度 B，作業層依 n 平均分布，
+   壁栓（wall tie）示意其中一處連接，H/B 穩定比與腳柱軸力依檢核結果變色。 */
+function buildScaffoldDiagram(H,B,n,HB,ok_HB,P_total,ok_post){
+  var W=460,H2=300,padB=44,padT=50;
+  var drawH=H2-padT-padB;
+  var scale=drawH/Math.max(H,1);
+  var Bpx=Math.min(B*scale,240);
+  var cx=W/2, x1=cx-Bpx/2, x2=cx+Bpx/2;
+  var baseY=H2-padB, topY=baseY-H*scale;
+
+  var D=JRH.diagram, s='';
+  s+=D.label(14,16,'施工架立面示意圖（比例尺概略）',{anchor:'start',size:8.5,color:'#8a8370'});
+  s+='<line x1="'+(x1-30)+'" y1="'+baseY+'" x2="'+(x2+30)+'" y2="'+baseY+'" stroke="#5c5442" stroke-width="1.4"/>';
+  s+='<line x1="'+x1+'" y1="'+baseY+'" x2="'+x1+'" y2="'+topY+'" stroke="#0b1f3a" stroke-width="2.4"/>';
+  s+='<line x1="'+x2+'" y1="'+baseY+'" x2="'+x2+'" y2="'+topY+'" stroke="#0b1f3a" stroke-width="2.4"/>';
+  var nLevels=Math.max(1,Math.round(n));
+  for(var i=1;i<=nLevels;i++){
+    var y=baseY-(H*i/nLevels)*scale;
+    s+='<line x1="'+x1+'" y1="'+y+'" x2="'+x2+'" y2="'+y+'" stroke="#c9a14a" stroke-width="2"/>';
+    s+=D.label(x2+8,y+3,'第'+i+'層',{anchor:'start',size:7.5,color:'#9a7b2a'});
+  }
+  var tieY=baseY-H*scale*0.6;
+  s+='<line x1="'+x2+'" y1="'+tieY+'" x2="'+(x2+26)+'" y2="'+tieY+'" stroke="#c0392b" stroke-width="1.6"/>';
+  s+='<rect x="'+(x2+26)+'" y="'+(tieY-14)+'" width="6" height="28" fill="#8a8370"/>';
+  s+=D.label(x2+20,tieY-10,'壁栓',{anchor:'start',size:7.5,color:'#c0392b'});
+  s+=D.dim(x1-22,topY,x1-22,baseY,'H='+H.toFixed(1)+'m',{color:'#5c5442'});
+  s+=D.dim(x1,baseY+18,x2,baseY+18,'B='+B.toFixed(1)+'m',{color:'#5c5442'});
+  var hbColor=ok_HB?'#1a7d3a':'#c0392b';
+  s+=D.label(W-10,16,'H/B='+HB.toFixed(2)+(ok_HB?' OK':' NG'),{anchor:'end',size:9.5,color:hbColor,weight:'700'});
+  var pColor=ok_post?'#1a7d3a':'#c0392b';
+  s+=D.label(cx,H2-8,'腳柱軸力 P='+P_total.toFixed(1)+'kN',{size:8.5,color:pColor,weight:'700'});
+  return D.wrap(W,H2,s,{maxWidth:420});
+}
+
 function calcScaffold(){
   var H=parseFloat(document.getElementById('sc-H').value);
   var B=parseFloat(document.getElementById('sc-B').value);
@@ -390,6 +425,8 @@ function calcScaffold(){
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
     '  職安規則§40；施工架設計基準 (勞動部)\n'+
     '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━';
+
+  if(window.JRH && JRH.diagram) document.getElementById('sc-diagram').innerHTML=buildScaffoldDiagram(H,B,n,HB,ok_HB,P_total,ok_post);
 
   document.getElementById('sc-result').innerHTML=
     '<table>'+
